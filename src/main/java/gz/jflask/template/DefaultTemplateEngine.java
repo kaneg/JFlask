@@ -2,6 +2,7 @@ package gz.jflask.template;
 
 import gz.jflask.FlaskException;
 import gz.jflask.InternalServerException;
+import gz.jflask.config.ConfigHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -55,14 +56,19 @@ public class DefaultTemplateEngine implements TemplateEngine {
 
     @Override
     public String render(String name, String source, Map<String, ?> context) throws FlaskException {
-        CompiledTemplate t = cache.get(name);
-        if (t == null) {
-            t = createTemplate(source);
-            if (name != null) {
-                cache.put(name, t);
+        boolean usCache = ConfigHelper.getAppConfigs().getBoolean("template.use_cache", true);
+        CompiledTemplate compiledTemplate = null;
+        if (usCache && name != null) {
+            compiledTemplate = cache.get(name);
+        }
+        if (compiledTemplate == null) {
+            LOGGER.debug("Create template from ", source);
+            compiledTemplate = createTemplate(source);
+            if (name != null && usCache) {
+                cache.put(name, compiledTemplate);
             }
         }
-        return t.render(context);
+        return compiledTemplate.render(context);
     }
 
     private CompiledTemplate createTemplate(String source) throws FlaskException {

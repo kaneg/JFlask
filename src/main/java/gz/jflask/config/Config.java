@@ -26,4 +26,12 @@ public class Config {
     public Collection<String> keys() {
         return map.keySet();
     }
+
+    public boolean getBoolean(String key, boolean defaultValue) {
+        String raw = get(key);
+        if (raw != null) {
+            return Boolean.parseBoolean(raw);
+        }
+        return defaultValue;
+    }
 }
