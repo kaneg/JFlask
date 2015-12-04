@@ -4,8 +4,8 @@ import gz.jflask.ClassLoaderHelper;
 import gz.jflask.FlaskContext;
 import gz.jflask.FlaskException;
 import gz.jflask.InternalServerException;
-import gz.jflask.annotation.AppView;
-import gz.jflask.annotation.DefaultValue;
+import gz.jflask.annotation.App;
+import gz.jflask.annotation.Default;
 import gz.jflask.annotation.Route;
 import gz.jflask.annotation.Var;
 import gz.jflask.config.Config;
@@ -47,7 +47,7 @@ public class Routers {
             for (String className : viewClasses) {
                 Class<?> clazz = reloadableHelper.loadClass(className);
 
-                AppView appView = clazz.getAnnotation(AppView.class);
+                App appView = clazz.getAnnotation(App.class);
                 if (appView != null) {
                     Object view = clazz.newInstance();
                     Method[] methods = clazz.getMethods();
@@ -97,7 +97,7 @@ public class Routers {
             for (int i = 0; i < parameters.length; i++) {
                 Parameter parameter = parameters[i];
                 Var var = parameter.getAnnotation(Var.class);
-                DefaultValue defaultValue = parameter.getAnnotation(DefaultValue.class);
+                Default defaultValue = parameter.getAnnotation(Default.class);
                 Object argValue;
                 if (variables != null && var != null && variables.containsKey(var.value())) {
                     //get value from var

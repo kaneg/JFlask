@@ -8,11 +8,11 @@ import java.lang.annotation.Target;
 /**
  * Created by IntelliJ IDEA.
  * User: kaneg
- * Date: 6/16/15
- * Time: 11:11 PM
+ * Date: 6/13/15
+ * Time: 3:49 PM
  */
+@Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.PARAMETER)
-public @interface DefaultValue {
-    String value();
+public @interface App {
+    String value() default "";
 }
